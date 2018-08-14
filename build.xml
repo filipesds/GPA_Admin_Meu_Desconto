@@ -3,7 +3,7 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="AdminMeuDesconto">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="MeuDesconto">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../Desktop/CWI/eclipse/"/>
     <property name="junit.output.dir" value="junit"/>
@@ -14,7 +14,7 @@
         <pathelement location="${ECLIPSE_HOME}plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
         <pathelement location="${ECLIPSE_HOME}plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
     </path>
-    <path id="AdminMeuDesconto.classpath">
+    <path id="MeuDesconto.classpath">
         <pathelement location="bin"/>
         <path refid="JUnit 4.libraryclasspath"/>
         <pathelement location="lib/JUnitParams/JUnitParams-1.0.2.jar"/>
@@ -107,7 +107,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="AdminMeuDesconto.classpath"/>
+            <classpath refid="MeuDesconto.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -124,44 +124,290 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="LoginTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.LoginTest" todir="${junit.output.dir}"/>
-            <classpath refid="AdminMeuDesconto.classpath"/>
-        </junit>
-    </target>
-    <target name="ProdutoTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.ProdutoTest" todir="${junit.output.dir}"/>
-            <classpath refid="AdminMeuDesconto.classpath"/>
-        </junit>
-    </target>
-    <target name="PromocoesClienteTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.PromocoesClienteTest" todir="${junit.output.dir}"/>
-            <classpath refid="AdminMeuDesconto.classpath"/>
-        </junit>
-    </target>
-    <target name="PromocoesTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.PromocoesTest" todir="${junit.output.dir}"/>
-            <classpath refid="AdminMeuDesconto.classpath"/>
-        </junit>
-    </target>
-    <target name="junitreport">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
-        </junitreport>
-    </target>
+	<!-- ########################################### LOGIN TEST ############################################# -->
+    <target name="SuiteLoginTest">
+    	 <attrib readonly="false">
+    		       		<fileset dir="${basedir}/properties"/>
+    		    	</attrib>
+    				<echo message="${basedir}/properties/selenium.properties" />
+    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
+    					<filterchain>
+    						<replacetokens>
+    							<token key="msite" value="${msite}" />
+    							<token key="browser" value="${browser}" />
+    							<token key="usuario" value="${usuario}" />
+    						</replacetokens>
+    					</filterchain>
+    				</copy>
+    				<echo message="${msite}" />
+    				<echo message="${browser}" />
+    				<echo message="${usuario}" />
+    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
+    			        <formatter type="xml"/>                        
+    					    <test name="tests.LoginTest" todir="${junit.output.dir}"/>                                    
+    				    <classpath refid="MeuDesconto.classpath"/>
+    			        <batchtest todir="${junit.output.dir}">
+    						<fileset dir="${junit.output.dir}">
+    					        <include name="LoginTest.java"/>                    
+    						</fileset>
+    					</batchtest>	
+    				</junit>
+    				<junitreport todir="${junit.output.dir}">
+    					<fileset dir="${junit.output.dir}">
+    						<include name="TEST-*.xml"/>
+    					</fileset>
+    					<report format="frames" todir="${junit.output.dir}"/>
+    				</junitreport>
+    				<junit fork="yes" printsummary="withOutAndErr" failureproperty="relatorio.failed" forkmode="once" haltonfailure="no" showoutput="no">
+    					<formatter type="xml" />
+    					<test name="tests.RelatorioTest"/>
+    					<classpath refid="MeuDesconto.classpath" /> 
+    					<batchtest>
+    						<fileset dir="${junit.output.dir}">
+    							<include name="RelatorioTest.java" />
+    						</fileset>
+    					</batchtest>
+    				</junit>
+    			   	<fail message="##### Houve falha na execução dos cenários.########" if="tests.failed" />
+    			   	<fail message="##### Houve falha na geração do relatório.########" if="relatorio.failed" />
+    		    </target>
+              	
+      <!-- ########################################### CONTROLE FILA TEST ############################################# -->
+              	    <target name="SuiteControleFilaTest">
+              	    	 <attrib readonly="false">
+              	    		       		<fileset dir="${basedir}/properties"/>
+              	    		    	</attrib>
+              	    				<echo message="${basedir}/properties/selenium.properties" />
+              	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
+              	    					<filterchain>
+              	    						<replacetokens>
+              	    							<token key="msite" value="${msite}" />
+              	    							<token key="browser" value="${browser}" />
+              	    							<token key="usuario" value="${usuario}" />
+              	    						</replacetokens>
+              	    					</filterchain>
+              	    				</copy>
+              	    				<echo message="${msite}" />
+              	    				<echo message="${browser}" />
+              	    				<echo message="${usuario}" />
+              	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
+              	    			        <formatter type="xml"/>                        
+              	    					    <test name="tests.ControleFilaTest" todir="${junit.output.dir}"/>                                    
+              	    				    <classpath refid="MeuDesconto.classpath"/>
+              	    			        <batchtest todir="${junit.output.dir}">
+              	    						<fileset dir="${junit.output.dir}">
+              	    					        <include name="ControleFilaTest.java"/>                    
+              	    						</fileset>
+              	    					</batchtest>	
+              	    				</junit>
+              	    				<junitreport todir="${junit.output.dir}">
+              	    					<fileset dir="${junit.output.dir}">
+              	    						<include name="TEST-*.xml"/>
+              	    					</fileset>
+              	    					<report format="frames" todir="${junit.output.dir}"/>
+              	    				</junitreport>
+              	    				<junit fork="yes" printsummary="withOutAndErr" failureproperty="relatorio.failed" forkmode="once" haltonfailure="no" showoutput="no">
+              	    					<formatter type="xml" />
+              	    					<test name="tests.RelatorioTest"/>
+              	    					<classpath refid="MeuDesconto.classpath" /> 
+              	    					<batchtest>
+              	    						<fileset dir="${junit.output.dir}">
+              	    							<include name="RelatorioTest.java" />
+              	    						</fileset>
+              	    					</batchtest>
+              	    				</junit>
+              	    			   	<fail message="##### Houve falha na execução dos cenários.########" if="tests.failed" />
+              	    			   	<fail message="##### Houve falha na geração do relatório.########" if="relatorio.failed" />
+              	    		    </target>
+     <!-- ########################################### MONITORAMENTO TEST ############################################# -->
+              	    <target name="SuiteMonitoramentoTest">
+              	    	 <attrib readonly="false">
+              	    		       		<fileset dir="${basedir}/properties"/>
+              	    		    	</attrib>
+              	    				<echo message="${basedir}/properties/selenium.properties" />
+              	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
+              	    					<filterchain>
+              	    						<replacetokens>
+              	    							<token key="msite" value="${msite}" />
+              	    							<token key="browser" value="${browser}" />
+              	    							<token key="usuario" value="${usuario}" />
+              	    						</replacetokens>
+              	    					</filterchain>
+              	    				</copy>
+              	    				<echo message="${msite}" />
+              	    				<echo message="${browser}" />
+              	    				<echo message="${usuario}" />
+              	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
+              	    			        <formatter type="xml"/>                        
+              	    					    <test name="tests.MonitoramentoTest" todir="${junit.output.dir}"/>                                    
+              	    				    <classpath refid="MeuDesconto.classpath"/>
+              	    			        <batchtest todir="${junit.output.dir}">
+              	    						<fileset dir="${junit.output.dir}">
+              	    					        <include name="MonitoramentoTest.java"/>                    
+              	    						</fileset>
+              	    					</batchtest>	
+              	    				</junit>
+              	    				<junitreport todir="${junit.output.dir}">
+              	    					<fileset dir="${junit.output.dir}">
+              	    						<include name="TEST-*.xml"/>
+              	    					</fileset>
+              	    					<report format="frames" todir="${junit.output.dir}"/>
+              	    				</junitreport>
+              	    				<junit fork="yes" printsummary="withOutAndErr" failureproperty="relatorio.failed" forkmode="once" haltonfailure="no" showoutput="no">
+              	    					<formatter type="xml" />
+              	    					<test name="tests.RelatorioTest"/>
+              	    					<classpath refid="MeuDesconto.classpath" /> 
+              	    					<batchtest>
+              	    						<fileset dir="${junit.output.dir}">
+              	    							<include name="RelatorioTest.java" />
+              	    						</fileset>
+              	    					</batchtest>
+              	    				</junit>
+              	    			   	<fail message="##### Houve falha na execução dos cenários.########" if="tests.failed" />
+              	    			   	<fail message="##### Houve falha na geração do relatório.########" if="relatorio.failed" />
+              	    		    </target>
+    
+              	<!-- ########################################### PROMOCOES TEST ############################################# -->
+              	    <target name="SuitePromocoesTest">
+              	    	 <attrib readonly="false">
+              	    		       		<fileset dir="${basedir}/properties"/>
+              	    		    	</attrib>
+              	    				<echo message="${basedir}/properties/selenium.properties" />
+              	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
+              	    					<filterchain>
+              	    						<replacetokens>
+              	    							<token key="msite" value="${msite}" />
+              	    							<token key="browser" value="${browser}" />
+              	    							<token key="usuario" value="${usuario}" />
+              	    						</replacetokens>
+              	    					</filterchain>
+              	    				</copy>
+              	    				<echo message="${msite}" />
+              	    				<echo message="${browser}" />
+              	    				<echo message="${usuario}" />
+              	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
+              	    			        <formatter type="xml"/>                        
+              	    					    <test name="tests.PromocoesTest" todir="${junit.output.dir}"/>                                    
+              	    				    <classpath refid="MeuDesconto.classpath"/>
+              	    			        <batchtest todir="${junit.output.dir}">
+              	    						<fileset dir="${junit.output.dir}">
+              	    					        <include name="PromocoesTest.java"/>                    
+              	    						</fileset>
+              	    					</batchtest>	
+              	    				</junit>
+              	    				<junitreport todir="${junit.output.dir}">
+              	    					<fileset dir="${junit.output.dir}">
+              	    						<include name="TEST-*.xml"/>
+              	    					</fileset>
+              	    					<report format="frames" todir="${junit.output.dir}"/>
+              	    				</junitreport>
+              	    				<junit fork="yes" printsummary="withOutAndErr" failureproperty="relatorio.failed" forkmode="once" haltonfailure="no" showoutput="no">
+              	    					<formatter type="xml" />
+              	    					<test name="tests.RelatorioTest"/>
+              	    					<classpath refid="MeuDesconto.classpath" /> 
+              	    					<batchtest>
+              	    						<fileset dir="${junit.output.dir}">
+              	    							<include name="RelatorioTest.java" />
+              	    						</fileset>
+              	    					</batchtest>
+              	    				</junit>
+              	    			   	<fail message="##### Houve falha na execução dos cenários.########" if="tests.failed" />
+              	    			   	<fail message="##### Houve falha na geração do relatório.########" if="relatorio.failed" />
+              	    		    </target>    
+              	
+              	<!-- ########################################### PROMOCOES CLIENTE TEST ############################################# -->
+              	    <target name="SuitePromocoesClienteTest">
+              	    	 <attrib readonly="false">
+              	    		       		<fileset dir="${basedir}/properties"/>
+              	    		    	</attrib>
+              	    				<echo message="${basedir}/properties/selenium.properties" />
+              	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
+              	    					<filterchain>
+              	    						<replacetokens>
+              	    							<token key="msite" value="${msite}" />
+              	    							<token key="browser" value="${browser}" />
+              	    							<token key="usuario" value="${usuario}" />
+              	    						</replacetokens>
+              	    					</filterchain>
+              	    				</copy>
+              	    				<echo message="${msite}" />
+              	    				<echo message="${browser}" />
+              	    				<echo message="${usuario}" />
+              	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
+              	    			        <formatter type="xml"/>                        
+              	    					    <test name="tests.PromocoesClienteTest" todir="${junit.output.dir}"/>                                    
+              	    				    <classpath refid="MeuDesconto.classpath"/>
+              	    			        <batchtest todir="${junit.output.dir}">
+              	    						<fileset dir="${junit.output.dir}">
+              	    					        <include name="PromocoesClienteTest.java"/>                    
+              	    						</fileset>
+              	    					</batchtest>	
+              	    				</junit>
+              	    				<junitreport todir="${junit.output.dir}">
+              	    					<fileset dir="${junit.output.dir}">
+              	    						<include name="TEST-*.xml"/>
+              	    					</fileset>
+              	    					<report format="frames" todir="${junit.output.dir}"/>
+              	    				</junitreport>
+              	    				<junit fork="yes" printsummary="withOutAndErr" failureproperty="relatorio.failed" forkmode="once" haltonfailure="no" showoutput="no">
+              	    					<formatter type="xml" />
+              	    					<test name="tests.RelatorioTest"/>
+              	    					<classpath refid="MeuDesconto.classpath" /> 
+              	    					<batchtest>
+              	    						<fileset dir="${junit.output.dir}">
+              	    							<include name="RelatorioTest.java" />
+              	    						</fileset>
+              	    					</batchtest>
+              	    				</junit>
+              	    			   	<fail message="##### Houve falha na execução dos cenários.########" if="tests.failed" />
+              	    			   	<fail message="##### Houve falha na geração do relatório.########" if="relatorio.failed" />
+              	    		    </target>
+              	
+    <!-- ########################################### PRODUTO TEST ############################################# -->          	
+              	<target name="SuiteProdutoTest">
+              	              	    	 <attrib readonly="false">
+              	              	    		       		<fileset dir="${basedir}/properties"/>
+              	              	    		    	</attrib>
+              	              	    				<echo message="${basedir}/properties/selenium.properties" />
+              	              	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
+              	              	    					<filterchain>
+              	              	    						<replacetokens>
+              	              	    							<token key="msite" value="${msite}" />
+              	              	    							<token key="browser" value="${browser}" />
+              	              	    							<token key="usuario" value="${usuario}" />
+              	              	    						</replacetokens>
+              	              	    					</filterchain>
+              	              	    				</copy>
+              	              	    				<echo message="${msite}" />
+              	              	    				<echo message="${browser}" />
+              	              	    				<echo message="${usuario}" />
+              	              	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
+              	              	    			        <formatter type="xml"/>                        
+              	              	    					    <test name="tests.ProdutoTest" todir="${junit.output.dir}"/>                                    
+              	              	    				    <classpath refid="MeuDesconto.classpath"/>
+              	              	    			        <batchtest todir="${junit.output.dir}">
+              	              	    						<fileset dir="${junit.output.dir}">
+              	              	    					        <include name="ProdutoTest.java"/>                    
+              	              	    						</fileset>
+              	              	    					</batchtest>	
+              	              	    				</junit>
+              	              	    				<junitreport todir="${junit.output.dir}">
+              	              	    					<fileset dir="${junit.output.dir}">
+              	              	    						<include name="TEST-*.xml"/>
+              	              	    					</fileset>
+              	              	    					<report format="frames" todir="${junit.output.dir}"/>
+              	              	    				</junitreport>
+              	              	    				<junit fork="yes" printsummary="withOutAndErr" failureproperty="relatorio.failed" forkmode="once" haltonfailure="no" showoutput="no">
+              	              	    					<formatter type="xml" />
+              	              	    					<test name="tests.RelatorioTest"/>
+              	              	    					<classpath refid="MeuDesconto.classpath" /> 
+              	              	    					<batchtest>
+              	              	    						<fileset dir="${junit.output.dir}">
+              	              	    							<include name="RelatorioTest.java" />
+              	              	    						</fileset>
+              	              	    					</batchtest>
+              	              	    				</junit>
+              	              	    			   	<fail message="##### Houve falha na execução dos cenários.########" if="tests.failed" />
+              	              	    			   	<fail message="##### Houve falha na geração do relatório.########" if="relatorio.failed" />
+              	              	    		    </target>
 </project>
