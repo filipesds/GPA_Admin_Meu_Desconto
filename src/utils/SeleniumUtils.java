@@ -5,12 +5,15 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.remote.*;
 import java.io.File;
 import java.io.IOException;
+import net.lightbody.bmp.BrowserMobProxy;
+import net.lightbody.bmp.BrowserMobProxyServer;
 
 public class SeleniumUtils implements SeleniumInterface {
 	private WebDriver driver = null;
 	ProjectProperties prop = new ProjectProperties();
 	ConfiguraUrl url = new ConfiguraUrl();
 	public static ChromeDriverService service;
+	public static BrowserMobProxy proxy;
 
 	public WebDriver getDriver(String browser) throws IOException, InterruptedException {
 
