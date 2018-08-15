@@ -133,13 +133,13 @@
     				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
     					<filterchain>
     						<replacetokens>
-    							<token key="msite" value="${msite}" />
+    							<token key="site" value="${site}" />
     							<token key="browser" value="${browser}" />
     							<token key="usuario" value="${usuario}" />
     						</replacetokens>
     					</filterchain>
     				</copy>
-    				<echo message="${msite}" />
+    				<echo message="${site}" />
     				<echo message="${browser}" />
     				<echo message="${usuario}" />
     	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
@@ -181,13 +181,13 @@
               	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
               	    					<filterchain>
               	    						<replacetokens>
-              	    							<token key="msite" value="${msite}" />
+              	    							<token key="site" value="${site}" />
               	    							<token key="browser" value="${browser}" />
               	    							<token key="usuario" value="${usuario}" />
               	    						</replacetokens>
               	    					</filterchain>
               	    				</copy>
-              	    				<echo message="${msite}" />
+              	    				<echo message="${site}" />
               	    				<echo message="${browser}" />
               	    				<echo message="${usuario}" />
               	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
@@ -228,13 +228,13 @@
               	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
               	    					<filterchain>
               	    						<replacetokens>
-              	    							<token key="msite" value="${msite}" />
+              	    							<token key="site" value="${site}" />
               	    							<token key="browser" value="${browser}" />
               	    							<token key="usuario" value="${usuario}" />
               	    						</replacetokens>
               	    					</filterchain>
               	    				</copy>
-              	    				<echo message="${msite}" />
+              	    				<echo message="${site}" />
               	    				<echo message="${browser}" />
               	    				<echo message="${usuario}" />
               	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
@@ -276,13 +276,13 @@
               	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
               	    					<filterchain>
               	    						<replacetokens>
-              	    							<token key="msite" value="${msite}" />
+              	    							<token key="site" value="${site}" />
               	    							<token key="browser" value="${browser}" />
               	    							<token key="usuario" value="${usuario}" />
               	    						</replacetokens>
               	    					</filterchain>
               	    				</copy>
-              	    				<echo message="${msite}" />
+              	    				<echo message="${site}" />
               	    				<echo message="${browser}" />
               	    				<echo message="${usuario}" />
               	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
@@ -324,13 +324,13 @@
               	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
               	    					<filterchain>
               	    						<replacetokens>
-              	    							<token key="msite" value="${msite}" />
+              	    							<token key="site" value="${site}" />
               	    							<token key="browser" value="${browser}" />
               	    							<token key="usuario" value="${usuario}" />
               	    						</replacetokens>
               	    					</filterchain>
               	    				</copy>
-              	    				<echo message="${msite}" />
+              	    				<echo message="${site}" />
               	    				<echo message="${browser}" />
               	    				<echo message="${usuario}" />
               	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
@@ -372,13 +372,13 @@
               	              	    				<copy file="${basedir}/properties/selenium-parameterized.properties" tofile="${basedir}/properties/selenium.properties" overwrite="true">
               	              	    					<filterchain>
               	              	    						<replacetokens>
-              	              	    							<token key="msite" value="${msite}" />
+              	              	    							<token key="site" value="${site}" />
               	              	    							<token key="browser" value="${browser}" />
               	              	    							<token key="usuario" value="${usuario}" />
               	              	    						</replacetokens>
               	              	    					</filterchain>
               	              	    				</copy>
-              	              	    				<echo message="${msite}" />
+              	              	    				<echo message="${site}" />
               	              	    				<echo message="${browser}" />
               	              	    				<echo message="${usuario}" />
               	              	    	 <junit fork="yes" printsummary="withOutAndErr" failureproperty="tests.failed" forkmode="once" haltonfailure="no" showoutput="yes" >
